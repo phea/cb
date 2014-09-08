@@ -7,8 +7,8 @@ type OrgResponse struct {
 }
 
 type OrgData struct {
-	Properties    *Organization `json:"properties"`
-	Relationships interface{}   `json:"relationships"`
+	*Organization `json:"properties"`
+	Relationships interface{} `json:"relationships"`
 }
 
 type Organization struct {
@@ -32,6 +32,5 @@ func (c *Client) GetOrganization(name string) (*Organization, error) {
 		return nil, err
 	}
 
-	org := data.Properties
-	return org, nil
+	return data.Organization, nil
 }

@@ -7,12 +7,12 @@ import (
 )
 
 type OrgListResponse struct {
-	OrgList  `json:"data"`
+	*OrgList `json:"data"`
 	Metadata interface{} `json:"metadata"`
 }
 
 type OrgList struct {
-	List []OrgEntry `json:"items"`
+	List []*OrgEntry `json:"items"`
 	Page `json:"paging"`
 }
 
@@ -31,8 +31,7 @@ func (c *Client) OrgSearch(params *url.Values) (*OrgList, error) {
 		return nil, err
 	}
 
-	list := data.OrgList
-	return &list, nil
+	return data.OrgList, nil
 }
 
 func (ol *OrgList) Next() (*OrgList, error) {

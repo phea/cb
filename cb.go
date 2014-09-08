@@ -3,12 +3,25 @@ package cb
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 )
+
+// CrunchBase does not set response headers with the code so we have to unmarshal
+// the json error message.
+type ErrorResponse struct {
+	Data struct {
+		Error struct {
+			Code    int64  `json:"code"`
+			Message string `json:"message"`
+		} `json:"error"`
+		Response bool `json:"response"`
+	} `json:"data"`
+}
 
 // apiUrl is the location to the CrunchBase API"
 const baseURL = "http://api.crunchbase.com/v/2"
@@ -68,7 +81,13 @@ func (c *Client) Call(path string, params *url.Values, v interface{}) error {
 		return err
 	}
 
-	//log.Println(string(resBody))
+	// Check if CrunchBase API returns an error message
+	var errResponse ErrorResponse
+	json.Unmarshal(resBody, &errResponse)
+	if errResponse.Data.Error.Code > 0 {
+		return errors.New(errResponse.Data.Error.Message)
+	}
+
 	if v != nil {
 		return json.Unmarshal(resBody, v)
 	}

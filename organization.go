@@ -13,7 +13,7 @@ type OrgData struct {
 
 type Organization struct {
 	Name                string `json:"name"`
-	Homepage            string `json:"homepage_url"`
+	URL                 string `json:"homepage_url"`
 	Permalink           string `json:"permalink"`
 	Role                string `json:"primary_role"`
 	IsClosed            bool   `json:"is_closed"`

@@ -24,7 +24,7 @@ type OrgEntry struct {
 	Updated int64  `json:"updated_at"`
 }
 
-func (c *Client) OrgSearch(params *url.Values) (*OrgList, error) {
+func (c *Client) GetOrganizations(params *url.Values) (*OrgList, error) {
 	var data *OrgListResponse
 	err := c.Call("/organizations", params, &data)
 	if err != nil {
@@ -46,7 +46,7 @@ func (ol *OrgList) Next() (*OrgList, error) {
 
 	c := GetClient()
 	params := u.Query()
-	return c.OrgSearch(&params)
+	return c.GetOrganizations(&params)
 }
 
 func (ol *OrgList) Prev() (*OrgList, error) {
@@ -61,5 +61,5 @@ func (ol *OrgList) Prev() (*OrgList, error) {
 
 	c := GetClient()
 	params := u.Query()
-	return c.OrgSearch(&params)
+	return c.GetOrganizations(&params)
 }
